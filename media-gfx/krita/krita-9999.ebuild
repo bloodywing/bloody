@@ -108,6 +108,7 @@ RDEPEND="
 	vc? ( <=dev-libs/vc-0.7.4 )
 	x11-libs/libX11
 	x11-libs/libXi
+	!app-office/calligra[calligra_features_krita]
 "
 DEPEND="${RDEPEND}
 	x11-misc/shared-mime-info
