@@ -5,8 +5,10 @@
 EAPI=5
 SRC_URI="https://github.com/Deevad/deevad-krita-brushpresets/archive/v${PV}.tar.gz -> brushkit-v${PV}.tar.gz"
 DESCRIPTION="Deevad's Krita Brushkit"
+HOMEPAGE="http://davidrevoy.com/"
 LICENSE="CC-0"
 SLOT="0"
+KEYWORDS="*"
 
 IUSE="+krita calligra"
 
