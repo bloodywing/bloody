@@ -18,7 +18,6 @@ DESCRIPTION="The free drawing Appliation Krita 3"
 HOMEPAGE="http://krita.org/"
 case ${PV} in
     3.0_alpha_pre3)
-		echo 'YOLO!' 
 		EGIT_COMMIT="de0d43d234a5c497f9001d6616e1d48597da2d98"
 		EGIT_REPO_URI="git://anongit.kde.org/krita.git" ;;
 	3.[456789].[789]?)
