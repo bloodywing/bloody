@@ -1,0 +1,13 @@
+<?xml version="1.0" ?>
+
+<repositories version="1.0">
+	<repo priority="50" quality="experimental" status="unofficial">
+		<name>bloody</name>
+		<description>Bloodywings overlay with GFX Stuff like krita</description>
+		<homepage>https://github.com/bloodywing/bloody</homepage>
+		<owner>
+			<email>bloodywing@tastyespresso.de</email>
+		</owner>
+		<source type="git">https://github.com/bloodywing/bloody.git</source>
+	</repo>
+</repositories>
