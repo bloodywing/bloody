@@ -7,12 +7,16 @@ EAPI=6
 KDE_DOXYGEN="false"
 KDE_HANDBOOK="false"
 KDE_TEST="false"
-inherit kde5
+inherit kde5 git-r3
+
+
+EGIT_COMMIT="v3.0.1"
+EGIT_REPO_URI="git://anongit.kde.org/krita"
 
 DESCRIPTION="Free digital painting application. Digital Painting, Creative Freedom!"
 HOMEPAGE="https://www.kde.org/applications/graphics/krita/ https://krita.org/"
-KEYWORDS=""
-IUSE="color-management fftw +gsl +jpeg jpeg2k +mime openexr pdf png +raw tiff vc X"
+KEYWORDS="~amd64"
+IUSE="color-management fftw +gsl +jpeg jpeg2k openexr pdf png +raw tiff vc"
 
 COMMON_DEPEND="
 	$(add_frameworks_dep karchive)
@@ -52,18 +56,12 @@ COMMON_DEPEND="
 	gsl? ( sci-libs/gsl )
 	jpeg? ( virtual/jpeg:0 )
 	jpeg2k? ( media-libs/openjpeg:0 )
-	mime? ( x11-misc/shared-mime-info )
 	openexr? ( media-libs/openexr )
 	pdf? ( app-text/poppler[qt5] )
 	png? ( media-libs/libpng:= )
 	raw? ( $(add_kdeapps_dep libkdcraw) )
 	tiff? ( media-libs/tiff:0 )
 	vc? ( dev-libs/vc )
-	X? (
-		$(add_qt_dep qtx11extras)
-		x11-libs/libX11
-		x11-libs/libxcb
-	)
 "
 DEPEND="${COMMON_DEPEND}
 	sys-devel/gettext
