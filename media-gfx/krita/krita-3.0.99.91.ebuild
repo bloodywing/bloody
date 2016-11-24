@@ -9,7 +9,6 @@ KDE_HANDBOOK="false"
 KDE_TEST="false"
 inherit kde5 git-r3
 
-
 EGIT_COMMIT="v3.0.99.91"
 EGIT_REPO_URI="git://anongit.kde.org/krita"
 

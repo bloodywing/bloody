@@ -1,4 +1,4 @@
-# Copyright 1999-2014 Gentoo Foundation
+# Copyright 1999-2016 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
@@ -20,7 +20,7 @@ IUSE="cups foomaticdb gimp gtk nls readline ppds static-libs"
 
 RDEPEND="app-text/ghostscript-gpl
 	dev-lang/perl
-	readline? ( sys-libs/readline )
+	readline? ( sys-libs/readline:0 )
 	cups? ( >=net-print/cups-1.1.14 )
 	foomaticdb? ( net-print/foomatic-db-engine )
 	gimp? ( >=media-gfx/gimp-2.2 x11-libs/gtk+:2 )
