@@ -12,6 +12,8 @@ inherit kde5 git-r3
 EGIT_BRANCH="krita/3.1"
 EGIT_REPO_URI="git://anongit.kde.org/krita"
 
+LICENSE="GPL-2+"
+
 DESCRIPTION="Free digital painting application. Digital Painting, Creative Freedom!"
 HOMEPAGE="https://www.kde.org/applications/graphics/krita/ https://krita.org/"
 KEYWORDS=""
@@ -45,7 +47,7 @@ COMMON_DEPEND="
 	$(add_qt_dep qtxml)
 	dev-cpp/eigen:3
 	dev-lang/perl
-	dev-libs/boost
+	dev-libs/boost:=
 	media-gfx/exiv2:=
 	media-libs/lcms
 	sys-libs/zlib
@@ -56,12 +58,15 @@ COMMON_DEPEND="
 	jpeg? ( virtual/jpeg:0 )
 	jpeg2k? ( media-libs/openjpeg:0 )
 	mime? ( x11-misc/shared-mime-info )
-	openexr? ( media-libs/openexr )
+	openexr? (
+		media-libs/openexr
+		media-libs/ilmbase:=
+	)
 	pdf? ( app-text/poppler[qt5] )
 	png? ( media-libs/libpng:= )
 	raw? ( $(add_kdeapps_dep libkdcraw) )
 	tiff? ( media-libs/tiff:0 )
-	vc? ( dev-libs/vc )
+	vc? ( >=dev-libs/vc-1.1.0 )
 	X? (
 		$(add_qt_dep qtx11extras)
 		x11-libs/libX11
@@ -74,6 +79,7 @@ DEPEND="${COMMON_DEPEND}
 "
 RDEPEND="${COMMON_DEPEND}
 	!app-office/calligra:4[calligra_features_krita]
+	!app-office/calligra-l10n:4[calligra_features_krita(+)]
 "
 
 src_configure() {
