@@ -42,7 +42,6 @@ S="${WORKDIR}"/${MY_P}
 
 src_prepare() {
 	xdg_environment_reset
-	epatch "${FILESDIR}"/${PN}-1.3.0_beta1-as-needed.patch
 	eapply_user
 }
 
