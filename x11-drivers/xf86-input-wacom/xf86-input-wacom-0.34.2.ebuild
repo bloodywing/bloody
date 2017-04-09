@@ -37,6 +37,7 @@ pkg_setup() {
 }
 
 src_install() {
+	emake DESTDIR="${D}" install
 	rm -rf "${ED}"/usr/share/hal
 }
 
