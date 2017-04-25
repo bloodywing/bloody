@@ -9,7 +9,7 @@ inherit kde5 versionator
 DESCRIPTION="Free digital painting application. Digital Painting, Creative Freedom!"
 HOMEPAGE="https://www.kde.org/applications/graphics/krita/ https://krita.org/"
 
-MY_PV="$(get_version_component_range 1-3)-beta.1"
+MY_PV="$(get_version_component_range 1-3)-rc.1"
 MY_P=${PN}-${MY_PV}
 S="${WORKDIR}/${MY_P}"
 
