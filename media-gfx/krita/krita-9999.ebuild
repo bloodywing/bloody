@@ -4,20 +4,16 @@
 EAPI=6
 
 KDE_TEST="forceoptional"
-inherit kde5 versionator
+inherit kde5 git-r3
+
+EGIT_REPO_URI="git://anongit.kde.org/krita"
+
+LICENSE="GPL-3"
 
 DESCRIPTION="Free digital painting application. Digital Painting, Creative Freedom!"
 HOMEPAGE="https://www.kde.org/applications/graphics/krita/ https://krita.org/"
-
-MY_PV="$(get_version_component_range 1-3)-beta.1"
-MY_P=${PN}-${MY_PV}
-S="${WORKDIR}/${MY_P}"
-
-SRC_URI="mirror://kde/unstable/${PN}/${MY_PV}/${MY_P}.tar.gz"
-
-LICENSE="GPL-2+"
-KEYWORDS="~amd64 ~x86"
-IUSE="color-management fftw +gsl +jpeg openexr pdf qtmedia +raw tiff vc"
+KEYWORDS=""
+IUSE="color-management fftw +gsl +jpeg openexr pdf qtmedia +raw tiff vc python"
 
 COMMON_DEPEND="
 	$(add_frameworks_dep karchive)
@@ -65,6 +61,11 @@ COMMON_DEPEND="
 	qtmedia? ( $(add_qt_dep qtmultimedia) )
 	raw? ( media-libs/libraw:= )
 	tiff? ( media-libs/tiff:0 )
+	python? (
+		dev-python/PyQt5
+		dev-python/sip
+		>=dev-lang/python-3:*
+	)
 "
 DEPEND="${COMMON_DEPEND}
 	dev-cpp/eigen:3
@@ -77,8 +78,7 @@ RDEPEND="${COMMON_DEPEND}
 	!app-office/calligra-l10n:4[calligra_features_krita(+)]
 "
 
-PATCHES=( "${FILESDIR}"/${PN}-vc-fix-gcc49-abi.patch
-		"${FILESDIR}"/elle_icc_include_all.patch  )
+PATCHES=( "${FILESDIR}"/${PN}-vc-fix-gcc49-abi.patch )
 
 src_configure() {
 	local mycmakeargs=(
