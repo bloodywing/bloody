@@ -64,7 +64,7 @@ COMMON_DEPEND="
 	python? (
 		dev-python/PyQt5
 		dev-python/sip
-		>=dev-lang/python-3:*
+		>=dev-lang/python-3.5:*
 	)
 "
 DEPEND="${COMMON_DEPEND}
