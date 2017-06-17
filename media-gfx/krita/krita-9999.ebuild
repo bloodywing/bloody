@@ -3,17 +3,21 @@
 
 EAPI=6
 
+PYTHON_COMPAT=( python3_{5,6} )
+
 KDE_TEST="forceoptional"
-inherit kde5 git-r3
+inherit kde5 git-r3 python-single-r1
 
 EGIT_REPO_URI="git://anongit.kde.org/krita"
+
+REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
 LICENSE="GPL-3"
 
 DESCRIPTION="Free digital painting application. Digital Painting, Creative Freedom!"
 HOMEPAGE="https://www.kde.org/applications/graphics/krita/ https://krita.org/"
 KEYWORDS=""
-IUSE="color-management fftw +gsl +jpeg openexr pdf qtmedia +raw tiff vc python"
+IUSE="color-management fftw +gsl +jpeg openexr pdf qtmedia +raw python tiff vc"
 
 COMMON_DEPEND="
 	$(add_frameworks_dep karchive)
@@ -62,9 +66,9 @@ COMMON_DEPEND="
 	raw? ( media-libs/libraw:= )
 	tiff? ( media-libs/tiff:0 )
 	python? (
-		dev-python/PyQt5
-		dev-python/sip
-		>=dev-lang/python-3.5:*
+		${PYTHON_DEPS}
+		dev-python/PyQt5[$PYTHON_USEDEP]
+		dev-python/sip[$PYTHON_USEDEP]
 	)
 "
 DEPEND="${COMMON_DEPEND}
@@ -80,6 +84,10 @@ RDEPEND="${COMMON_DEPEND}
 
 PATCHES=( "${FILESDIR}"/${PN}-vc-fix-gcc49-abi.patch )
 
+pkg_setup() {
+	use python && python-single-r1_pkg_setup
+}
+
 src_configure() {
 	local mycmakeargs=(
 		$(cmake-utils_use_find_package color-management OCIO)
@@ -92,6 +100,9 @@ src_configure() {
 		$(cmake-utils_use_find_package raw LibRaw)
 		$(cmake-utils_use_find_package tiff TIFF)
 		$(cmake-utils_use_find_package vc Vc)
+		$(cmake-utils_use_find_package python Python)
+				-DPYTHON_INCLUDE_PATH="$(python_get_includedir)"
+				-DPYTHON_LIBRARY="$(python_get_library_path)"
 	)
 
 	kde5_src_configure
