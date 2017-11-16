@@ -3,26 +3,24 @@
 
 EAPI=6
 
-KDE_DOXYGEN="false"
-KDE_HANDBOOK="false"
-KDE_TEST="false"
-inherit kde5 git-r3
-
-EGIT_BRANCH="krita/3.1"
-EGIT_REPO_URI="git://anongit.kde.org/krita"
-
-LICENSE="GPL-2+"
+KDE_TEST="forceoptional"
+VIRTUALX_REQUIRED="test"
+inherit kde5
 
 DESCRIPTION="Free digital painting application. Digital Painting, Creative Freedom!"
 HOMEPAGE="https://www.kde.org/applications/graphics/krita/ https://krita.org/"
-KEYWORDS=""
-IUSE="+color-management +fftw +gsl +jpeg jpeg2k +mime openexr pdf +png +raw tiff +vc X"
+SRC_URI="mirror://kde/stable/${PN}/${PV}/${P}.tar.xz"
+
+LICENSE="GPL-3"
+KEYWORDS="~amd64 ~x86"
+IUSE="color-management fftw +gsl +jpeg openexr pdf qtmedia +raw tiff vc"
 
 COMMON_DEPEND="
 	$(add_frameworks_dep karchive)
 	$(add_frameworks_dep kcompletion)
 	$(add_frameworks_dep kconfig)
 	$(add_frameworks_dep kcoreaddons)
+	$(add_frameworks_dep kcrash)
 	$(add_frameworks_dep kguiaddons)
 	$(add_frameworks_dep ki18n)
 	$(add_frameworks_dep kiconthemes)
@@ -30,70 +28,66 @@ COMMON_DEPEND="
 	$(add_frameworks_dep kitemmodels)
 	$(add_frameworks_dep kitemviews)
 	$(add_frameworks_dep kwidgetsaddons)
+	$(add_frameworks_dep kwindowsystem)
 	$(add_frameworks_dep kxmlgui)
-	$(add_qt_dep designer)
 	$(add_qt_dep qtconcurrent)
 	$(add_qt_dep qtdbus)
-	$(add_qt_dep qtdeclarative)
-	$(add_qt_dep qtgui)
+	$(add_qt_dep qtgui '-gles2')
 	$(add_qt_dep qtnetwork)
-	$(add_qt_dep qtopengl)
 	$(add_qt_dep qtprintsupport)
-	$(add_qt_dep qtscript)
 	$(add_qt_dep qtsvg)
 	$(add_qt_dep qtwidgets)
 	$(add_qt_dep qtx11extras)
 	$(add_qt_dep qtxml)
-	dev-cpp/eigen:3
-	dev-lang/perl
 	dev-libs/boost:=
 	media-gfx/exiv2:=
 	media-libs/lcms
+	media-libs/libpng:0=
 	sys-libs/zlib
 	virtual/opengl
+	x11-libs/libX11
+	x11-libs/libxcb
+	x11-libs/libXi
 	color-management? ( media-libs/opencolorio )
-	fftw? ( sci-libs/fftw:3.0 )
-	gsl? ( sci-libs/gsl )
+	fftw? ( sci-libs/fftw:3.0= )
+	gsl? ( sci-libs/gsl:= )
 	jpeg? ( virtual/jpeg:0 )
-	jpeg2k? ( media-libs/openjpeg:0 )
-	mime? ( x11-misc/shared-mime-info )
 	openexr? (
-		media-libs/openexr
 		media-libs/ilmbase:=
+		media-libs/openexr
 	)
 	pdf? ( app-text/poppler[qt5] )
-	png? ( media-libs/libpng:= )
-	raw? ( $(add_kdeapps_dep libkdcraw) )
+	qtmedia? ( $(add_qt_dep qtmultimedia) )
+	raw? ( media-libs/libraw:= )
 	tiff? ( media-libs/tiff:0 )
-	vc? ( >=dev-libs/vc-1.1.0 )
-	X? (
-		$(add_qt_dep qtx11extras)
-		x11-libs/libX11
-		x11-libs/libxcb
-	)
 "
 DEPEND="${COMMON_DEPEND}
+	dev-cpp/eigen:3
+	dev-lang/perl
 	sys-devel/gettext
-	x11-misc/shared-mime-info
+	vc? ( >=dev-libs/vc-1.1.0 )
 "
 RDEPEND="${COMMON_DEPEND}
 	!app-office/calligra:4[calligra_features_krita]
 	!app-office/calligra-l10n:4[calligra_features_krita(+)]
 "
 
+PATCHES=( "${FILESDIR}"/${PN}-3.2.0-tests-optional.patch
+	  "${FILESDIR}"/${PN}-vc-fix-gcc49-abi.patch
+	  "${FILESDIR}"/elle_icc_include_all.patch  )
+
 src_configure() {
 	local mycmakeargs=(
-		-DWITH_OCIO=$(usex color-management)
-		-DWITH_FFTW3=$(usex fftw)
-		-DWITH_GSL=$(usex gsl)
-		-DWITH_JPEG=$(usex jpeg)
-		-DWITH_OpenJPEG=$(usex jpeg2k)
-		-DWITH_OpenEXR=$(usex openexr)
-		-DWITH_Poppler=$(usex pdf)
-		-DWITH_PNG=$(usex png)
-		-DWITH_KF5KDcraw=$(usex raw)
-		-DWITH_TIFF=$(usex tiff)
-		-DWITH_Vc=$(usex vc)
+		$(cmake-utils_use_find_package color-management OCIO)
+		$(cmake-utils_use_find_package fftw FFTW3)
+		$(cmake-utils_use_find_package gsl GSL)
+		$(cmake-utils_use_find_package jpeg JPEG)
+		$(cmake-utils_use_find_package openexr OpenEXR)
+		$(cmake-utils_use_find_package pdf Poppler)
+		$(cmake-utils_use_find_package qtmedia Qt5Multimedia)
+		$(cmake-utils_use_find_package raw LibRaw)
+		$(cmake-utils_use_find_package tiff TIFF)
+		$(cmake-utils_use_find_package vc Vc)
 	)
 
 	kde5_src_configure
