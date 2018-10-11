@@ -82,7 +82,6 @@ RDEPEND="${COMMON_DEPEND}
 	!app-office/calligra-l10n:4[calligra_features_krita(+)]
 "
 
-PATCHES=( "${FILESDIR}"/${PN}-vc-fix-gcc49-abi.patch )
 
 pkg_setup() {
 	use python && python-single-r1_pkg_setup
