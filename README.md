@@ -1,5 +1,5 @@
 # bloody
-My Gentoo overlay, containing Krita 3, the QT5 port (krita-next)
+My Gentoo overlay, containing Krita 4, the QT5 port (krita-next)
 Current Gutenprint
 various Krita resources and tools for it.
 
