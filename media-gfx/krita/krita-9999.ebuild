@@ -8,7 +8,7 @@ PYTHON_COMPAT=( python3_{5,6} )
 KDE_TEST="forceoptional"
 inherit kde5 git-r3 python-single-r1
 
-EGIT_REPO_URI="git://anongit.kde.org/krita"
+EGIT_REPO_URI="https://anongit.kde.org/krita"
 
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
