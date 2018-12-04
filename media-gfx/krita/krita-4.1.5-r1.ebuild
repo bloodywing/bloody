@@ -3,7 +3,7 @@
 
 EAPI=6
 
-PYTHON_COMPAT=( python3_{5,6} python2_7 )
+PYTHON_COMPAT=( python3_{5,6,7} )
 
 KDE_TEST="forceoptional"
 inherit kde5 python-single-r1
