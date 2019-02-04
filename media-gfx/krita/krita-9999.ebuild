@@ -75,6 +75,7 @@ DEPEND="${COMMON_DEPEND}
 	dev-cpp/eigen:3
 	dev-lang/perl
 	sys-devel/gettext
+	dev-libs/quazip[qt5]
 	vc? ( >=dev-libs/vc-1.1.0 )
 "
 RDEPEND="${COMMON_DEPEND}
