@@ -6,17 +6,16 @@ EAPI=6
 PYTHON_COMPAT=( python3_{5,6,7} )
 
 KDE_TEST="forceoptional"
-inherit kde5 git-r3 python-single-r1
-
-EGIT_REPO_URI="https://anongit.kde.org/krita"
+inherit kde5 python-single-r1 versionator
 
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
 LICENSE="GPL-3"
-
+MY_PV=$(get_version_component_range 1-3)
 DESCRIPTION="Free digital painting application. Digital Painting, Creative Freedom!"
 HOMEPAGE="https://www.kde.org/applications/graphics/krita/ https://krita.org/"
-KEYWORDS=""
+KEYWORDS="~x86 ~amd64"
+SRC_URI="mirror://kde/stable/${PN}/${MY_PV}/${P}.tar.gz"
 IUSE="color-management fftw +gsl +jpeg openexr pdf qtmedia +raw python tiff vc"
 
 COMMON_DEPEND="
@@ -75,14 +74,12 @@ DEPEND="${COMMON_DEPEND}
 	dev-cpp/eigen:3
 	dev-lang/perl
 	sys-devel/gettext
-	dev-libs/quazip
 	vc? ( >=dev-libs/vc-1.1.0 )
 "
 RDEPEND="${COMMON_DEPEND}
 	!app-office/calligra:4[calligra_features_krita]
 	!app-office/calligra-l10n:4[calligra_features_krita(+)]
 "
-
 
 pkg_setup() {
 	use python && python-single-r1_pkg_setup
