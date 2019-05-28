@@ -1,4 +1,4 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2019 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -6,10 +6,7 @@ EAPI=6
 PYTHON_COMPAT=( python3_{5,6,7} )
 
 KDE_TEST="forceoptional"
-inherit kde5 git-r3 python-single-r1
-
-EGIT_REPO_URI="https://anongit.kde.org/krita"
-EGIT_COMMIT="v4.2.0-beta2"
+inherit kde5 python-single-r1
 
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
@@ -18,6 +15,7 @@ LICENSE="GPL-3"
 DESCRIPTION="Free digital painting application. Digital Painting, Creative Freedom!"
 HOMEPAGE="https://www.kde.org/applications/graphics/krita/ https://krita.org/"
 KEYWORDS="~amd64 ~x86"
+SRC_URI="mirror://kde/stable/${PN}/${PV}/${P}.tar.gz"
 IUSE="color-management fftw +gsl +jpeg openexr pdf qtmedia +raw python tiff vc"
 
 COMMON_DEPEND="
@@ -83,7 +81,6 @@ RDEPEND="${COMMON_DEPEND}
 	!app-office/calligra:4[calligra_features_krita]
 	!app-office/calligra-l10n:4[calligra_features_krita(+)]
 "
-
 
 pkg_setup() {
 	use python && python-single-r1_pkg_setup
