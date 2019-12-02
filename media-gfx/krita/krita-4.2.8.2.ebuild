@@ -1,7 +1,7 @@
 # Copyright 1999-2019 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 PYTHON_COMPAT=( python3_{5,6,7} )
 
@@ -15,7 +15,7 @@ LICENSE="GPL-3"
 DESCRIPTION="Free digital painting application. Digital Painting, Creative Freedom!"
 HOMEPAGE="https://www.kde.org/applications/graphics/krita/ https://krita.org/"
 KEYWORDS="~amd64 ~x86"
-SRC_URI="mirror://kde/stable/${PN}/${PV}/${P}.tar.gz"
+SRC_URI="mirror://kde/stable/${PN}/$(ver_cut 1-3)/${P}.tar.gz"
 IUSE="color-management fftw +gsl +jpeg openexr pdf qtmedia +raw python tiff vc"
 
 COMMON_DEPEND="
