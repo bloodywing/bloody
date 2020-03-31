@@ -1,24 +1,38 @@
-# Copyright 1999-2019 Gentoo Foundation
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{5,6,7} )
-
 KDE_TEST="forceoptional"
+QT_MINIMAL="5.11.3"
+VIRTUALX_REQUIRED="test"
+PYTHON_COMPAT=( python3_{5,6,7} )
 inherit kde5 python-single-r1
 
-REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
-LICENSE="GPL-3"
+MY_PV="$(ver_cut 1-4)$(ver_cut 6)"
+S="${WORKDIR}/${PN}-${MY_PV}"
+
+
+if [[ ${KDE_BUILD_TYPE} = release ]]; then
+	SRC_URI="mirror://kde/stable/${PN}/$(ver_cut 1-3)/${P}.tar.xz"
+	KEYWORDS="amd64 ~x86"
+fi
 
 DESCRIPTION="Free digital painting application. Digital Painting, Creative Freedom!"
 HOMEPAGE="https://www.kde.org/applications/graphics/krita/ https://krita.org/"
-KEYWORDS="~amd64 ~x86"
-SRC_URI="mirror://kde/stable/${PN}/$(ver_cut 1-3)/${P}.tar.gz"
-IUSE="color-management fftw +gsl +jpeg openexr pdf qtmedia +raw python tiff vc"
+LICENSE="GPL-3"
+IUSE="color-management fftw gif +gsl heif +jpeg openexr pdf qtmedia +raw tiff vc"
+REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
-COMMON_DEPEND="
+# FIXME: drop qtgui subslot operator when QTBUG is fixed or QT_MINIMAL >= 5.12.0:
+# https://bugreports.qt.io/browse/QTBUG-72488
+BDEPEND="
+	dev-cpp/eigen:3
+	dev-lang/perl
+	sys-devel/gettext
+"
+COMMON_DEPEND="${PYTHON_DEPS}
 	$(add_frameworks_dep karchive)
 	$(add_frameworks_dep kcompletion)
 	$(add_frameworks_dep kconfig)
@@ -27,7 +41,6 @@ COMMON_DEPEND="
 	$(add_frameworks_dep kguiaddons)
 	$(add_frameworks_dep ki18n)
 	$(add_frameworks_dep kiconthemes)
-	$(add_frameworks_dep kio)
 	$(add_frameworks_dep kitemmodels)
 	$(add_frameworks_dep kitemviews)
 	$(add_frameworks_dep kwidgetsaddons)
@@ -35,7 +48,8 @@ COMMON_DEPEND="
 	$(add_frameworks_dep kxmlgui)
 	$(add_qt_dep qtconcurrent)
 	$(add_qt_dep qtdbus)
-	$(add_qt_dep qtgui '-gles2')
+	$(add_qt_dep qtdeclarative)
+	$(add_qt_dep qtgui '-gles2' '' '5=')
 	$(add_qt_dep qtnetwork)
 	$(add_qt_dep qtprintsupport)
 	$(add_qt_dep qtsvg)
@@ -43,10 +57,11 @@ COMMON_DEPEND="
 	$(add_qt_dep qtx11extras)
 	$(add_qt_dep qtxml)
 	dev-libs/boost:=
+	dev-python/PyQt5[${PYTHON_USEDEP}]
+	dev-python/sip[${PYTHON_USEDEP}]
 	media-gfx/exiv2:=
 	media-libs/lcms
 	media-libs/libpng:0=
-	net-misc/curl
 	sys-libs/zlib
 	virtual/opengl
 	x11-libs/libX11
@@ -54,8 +69,10 @@ COMMON_DEPEND="
 	x11-libs/libXi
 	color-management? ( media-libs/opencolorio )
 	fftw? ( sci-libs/fftw:3.0= )
+	gif? ( media-libs/giflib )
 	gsl? ( sci-libs/gsl:= )
 	jpeg? ( virtual/jpeg:0 )
+	heif? ( media-libs/libheif:= )
 	openexr? (
 		media-libs/ilmbase:=
 		media-libs/openexr
@@ -64,17 +81,8 @@ COMMON_DEPEND="
 	qtmedia? ( $(add_qt_dep qtmultimedia) )
 	raw? ( media-libs/libraw:= )
 	tiff? ( media-libs/tiff:0 )
-	python? (
-		${PYTHON_DEPS}
-		dev-python/PyQt5[$PYTHON_USEDEP]
-		dev-python/sip[$PYTHON_USEDEP]
-	)
 "
 DEPEND="${COMMON_DEPEND}
-	dev-cpp/eigen:3
-	dev-lang/perl
-	sys-devel/gettext
-	dev-libs/quazip
 	vc? ( >=dev-libs/vc-1.1.0 )
 "
 RDEPEND="${COMMON_DEPEND}
@@ -82,15 +90,28 @@ RDEPEND="${COMMON_DEPEND}
 	!app-office/calligra-l10n:4[calligra_features_krita(+)]
 "
 
+# bug 630508
+RESTRICT+=" test"
+
+PATCHES=(
+)
+
 pkg_setup() {
-	use python && python-single-r1_pkg_setup
+	python-single-r1_pkg_setup
+	kde5_pkg_setup
 }
 
 src_configure() {
+	# Prevent sandbox violation from FindPyQt5.py module
+	# See Gentoo-bug 655918
+	addpredict /dev/dri
+
 	local mycmakeargs=(
 		$(cmake-utils_use_find_package color-management OCIO)
 		$(cmake-utils_use_find_package fftw FFTW3)
+		$(cmake-utils_use_find_package gif GIF)
 		$(cmake-utils_use_find_package gsl GSL)
+		$(cmake-utils_use_find_package heif HEIF)
 		$(cmake-utils_use_find_package jpeg JPEG)
 		$(cmake-utils_use_find_package openexr OpenEXR)
 		$(cmake-utils_use_find_package pdf Poppler)
@@ -98,10 +119,8 @@ src_configure() {
 		$(cmake-utils_use_find_package raw LibRaw)
 		$(cmake-utils_use_find_package tiff TIFF)
 		$(cmake-utils_use_find_package vc Vc)
-		$(cmake-utils_use_find_package python Python)
-				-DPYTHON_INCLUDE_PATH="$(python_get_includedir)"
-				-DPYTHON_LIBRARY="$(python_get_library_path)"
 	)
 
 	kde5_src_configure
 }
+
