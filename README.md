@@ -1,7 +1,11 @@
 # bloody
-My Gentoo overlay, containing Krita 4, the QT5 port (krita-next)
+My Gentoo overlay, containing Krita Stuff and tools for it
 Current Gutenprint
-various Krita resources and tools for it.
+
+To install Krita, simply use
+ `emerge krita`
+ 
+ The official gentoo repository usually has the most recent version.
 
 Using this with layman:
 
